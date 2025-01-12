@@ -8,7 +8,7 @@ import cartsRouter from "./routes/carts.router.js";
 import productsRouter from "./routes/products.router.js";
 import viewsRouter from "./routes/views.router.js";
 import path from "path";
-import { __dirname } from "./utils.js";
+import { __dirname } from "./utils/utils.js";
 import CartManager from "./service/CartManager.js";
 import cookieParser from "cookie-parser";
 import dotenv from "dotenv";
@@ -20,9 +20,11 @@ import authRouter from "./routes/auth.router.js";
 import purchaseRouter from "./routes/purchase.router.js";
 import cors from "cors";
 import proxyRouter from "./routes/proxy.router.js";
+import mocksRouter from "./routes/mocks.router.js";
+import errorHandler from "./middleware/errorHandler.js";
 
 dotenv.config();
-import { configureLocalStrategy, configureJwtStrategy } from "./config/passport.js"; 
+import { configureLocalStrategy, configureJwtStrategy } from "./config/passport.js";
 
 const app = express();
 const server = http.createServer(app);
@@ -80,6 +82,7 @@ app.use("/api/sessions", sessionRouter);
 app.use("/auth", authRouter);
 app.use("/api/purchases", purchaseRouter);
 app.use('/api', proxyRouter);
+app.use("/api/mocks", mocksRouter);
 
 io.on("connection", (socket) => {
     console.log("Un usuario se ha conectado:", socket.id);
@@ -90,6 +93,9 @@ io.on("connection", (socket) => {
 });
 
 app.use(express.static(path.join(__dirname, "public")));
+
+// Manejador de errores
+app.use(errorHandler);
 
 server.listen(process.env.PORT, () => {
     console.log(`Servidor corriendo en el puerto ${process.env.PORT}`);

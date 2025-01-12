@@ -1,7 +1,7 @@
 import express from "express";
 import CartManager from "../service/CartManager.js";
 import authenticateToken from "../middleware/authenticateToken.js";
-import { validateProductStock } from "../utils.js";
+import { validateProductStock } from "../utils/utils.js";
 
 const router = express.Router();
 const cartManager = new CartManager();

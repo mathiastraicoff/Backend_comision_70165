@@ -1,7 +1,8 @@
-
+import passport from "passport";
 import UserService from "../service/UserManager.js";
 import jwt from "jsonwebtoken";
-import passport from "passport";
+import bcrypt from "bcrypt";
+import { generateUser } from "../utils/user.utils.js";
 
 class SessionController {
     async registerUser(req, res) {
@@ -19,7 +20,13 @@ class SessionController {
             }
 
             const newUser = await UserService.createUser({
-                first_name, last_name, email: register_email, phone, age, password: register_password, isAdmin: admin_password === process.env.ADMIN_PASSWORD,
+                first_name,
+                last_name,
+                email: register_email,
+                phone,
+                age,
+                password: register_password,
+                isAdmin: admin_password === process.env.ADMIN_PASSWORD,
             });
 
             const token = jwt.sign({ id: newUser.id }, process.env.JWT_SECRET, { expiresIn: "1h" });
@@ -33,7 +40,7 @@ class SessionController {
         }
     }
 
-    loginUser(req, res, next) {
+    async loginUser(req, res, next) {
         passport.authenticate("local", { session: false }, async (err, user, info) => {
             console.log("Autenticando usuario...");
             if (err) {
@@ -54,12 +61,6 @@ class SessionController {
         })(req, res, next);
     }
 
-    logoutUser(req, res) {
-        res.clearCookie("token");
-        console.log("Usuario desconectado");
-        return res.redirect("/login");
-    }
-
     async getCurrentUser(req, res) {
         try {
             console.log("Obteniendo usuario actual con ID:", req.user.id);
@@ -74,6 +75,42 @@ class SessionController {
             console.error("Error al obtener usuario actual:", error);
             return res.status(500).json({ message: "Error al obtener usuario actual", error: error.message });
         }
+    }
+
+    // Métodos para generar usuarios mock
+    async createMockingUser(req, res) {
+        try {
+            const user = await generateUser(); 
+            user.password = await bcrypt.hash('coder123', 10); 
+            user.isAdmin = Math.random() > 0.5; 
+            const newUser = await UserService.createUser(user);
+            res.json(newUser);
+        } catch (error) {
+            console.error("Error al generar usuario de mock:", error);
+            res.status(500).json({ message: "Error al generar usuario", error: error.message });
+        }
+    }
+
+    async createMockingUserWithoutResponse() {
+        try {
+            const user = await generateUser(); 
+            user.password = await bcrypt.hash('coder123', 10); 
+            user.isAdmin = Math.random() > 0.5; 
+            const newUser = await UserService.createUser(user);
+            return newUser;
+        } catch (error) {
+            console.error("Error al generar usuario de mock:", error);
+            throw new Error("Error al generar usuario");
+        }
+    }
+
+    async createMockingUsers(count) {
+        const users = [];
+        for (let i = 0; i < count; i++) {
+            const user = await generateUser();
+            users.push(user);
+        }
+        return users;
     }
 }
 

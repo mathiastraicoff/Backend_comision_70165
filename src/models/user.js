@@ -7,12 +7,10 @@ const userSchema = new mongoose.Schema({
     phone: { type: String, required: true },
     age: { type: Number, required: true },
     password: { type: String, required: true },
-    isAdmin: { type: Boolean, default: false },
-}, {
-    timestamps: true,  // Añadir campos createdAt y updatedAt
+    role: { type: String, enum: ["user", "admin"], default: "user" },
+    pets: { type: Array, default: [] }
 });
 
 const User = mongoose.model("User", userSchema);
 
 export default User;
-
