@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/style.css">
+    <title>Productos</title>
+</head>
+<body>
+    <h1>Productos</h1>
+    <a href="/carts/{{cartId}}">Ir al carrito (<span id="cart-count">{{cartCount}}</span>)</a>
+    <br><br>
+    <div>
+        <form method="GET" action="/products">
+            <label for="category">Filtrar por categoría:</label>
+            <select id="category" name="category" onchange="this.form.submit()">
+                <option value="">Todas</option>
+                {{#each categories}}
+                    <option value="{{this}}" {{#if selectedCategory}}selected{{/if}}>{{this}}</option>
+                {{/each}}
+            </select>
+            <label for="available">Disponibles:</label>
+            <input type="checkbox" id="available" name="available" {{#if available}}checked{{/if}} onchange="this.form.submit()">
+        </form>
+    </div>
+    <div class="product-container">
+        {{#each products}}
+            <div class="product-card">
+                <h2>{{this.title}}</h2>
+                <p>Precio: ${{this.price}}</p>
+                <form action="/api/carts/{{cartId}}/products/{{this._id}}" method="POST">
+                    <input type="hidden" name="quantity" value="1">
+                    <button type="submit">Agregar al carrito</button>
+                </form>
+            </div>
+        {{/each}}
+    </div>
+    <div class="pagination">
+        {{#if hasPrevPage}}
+            <a href="?page={{prevPage}}">Anterior</a>
+        {{/if}}
+        <span>Página {{currentPage}} de {{totalPages}}</span>
+        {{#if hasNextPage}}
+            <a href="?page={{nextPage}}">Siguiente</a>
+        {{/if}}
+    </div>
+</body>
+</html>

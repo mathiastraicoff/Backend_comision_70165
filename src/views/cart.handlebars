@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Carrito</title>
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+    <h1>Carrito de Compras</h1>
+    <ul id="cart-list">
+        {{#each cart.products}}
+            <li>
+                <h2>{{this.product.title}}</h2>
+                <p>Cantidad: {{this.quantity}}</p>
+                <button class="remove-from-cart-button" data-product-id="{{this.product._id}}">Eliminar</button>
+            </li>
+        {{/each}}
+    </ul>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="/js/index.js"></script>
+</body>
+</html>
+

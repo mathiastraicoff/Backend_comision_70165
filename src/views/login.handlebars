@@ -1,0 +1,129 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Iniciar Sesión / Registro</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/css/intlTelInput.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f4f4f4;
+        }
+        form {
+            background: white;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+        button {
+            cursor: pointer;
+            padding: 10px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        #toggle-form {
+            background: none;
+            border: none;
+            color: #007bff;
+            text-decoration: underline;
+            cursor: pointer;
+        }
+        .error-message {
+            color: red;
+            font-size: 14px;
+        }
+        .success-icon, .error-icon {
+            display: none;
+            width: 20px;
+            height: 20px;
+        }
+        .success-icon {
+            color: green;
+        }
+        .error-icon {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+    <div>
+        <h1 id="form-title">Iniciar Sesión</h1>
+
+        <!-- Formulario de inicio de sesión -->
+        <form id="login-form">
+            <div>
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" autocomplete="email" required>
+                <div id="login-error" class="error-message" style="display:none;">Por favor, ingresa un email válido.</div>
+            </div>
+            <div>
+                <label for="password">Contraseña:</label>
+                <input type="password" id="password" name="password" autocomplete="current-password" required>
+                <div id="password-error" class="error-message" style="display:none;">Por favor, ingresa tu contraseña.</div>
+            </div>
+            <button type="submit">Iniciar Sesión</button>
+        </form>
+
+        <!-- Formulario de registro -->
+        <form id="register-form" style="display:none;">
+            <div>
+                <label for="first_name">Nombre:</label>
+                <input type="text" id="first_name" name="first_name" required>
+            </div>
+            <div>
+                <label for="last_name">Apellido:</label>
+                <input type="text" id="last_name" name="last_name" required>
+            </div>
+            <div>
+                <label for="register_email">Email:</label>
+                <input type="email" id="register_email" name="register_email" autocomplete="email" required>
+                <div id="register-email-error" class="error-message" style="display:none;">Por favor, ingresa un email válido.</div>
+            </div>
+            <div>
+                <label for="phone">Número de Teléfono:</label>
+                <input type="tel" id="phone" name="phone" required>
+            </div>
+            <div>
+                <label for="age">Edad:</label>
+                <input type="number" id="age" name="age" required>
+            </div>
+            <div>
+                <label for="register_password">Contraseña:</label>
+                <input type="password" id="register_password" name="register_password" autocomplete="new-password" required>
+                <span id="password-valid-icon" class="success-icon">&#10004;</span>
+                <span id="password-invalid-icon" class="error-icon">&#10060;</span>
+            </div>
+            <div>
+                <label for="confirm_password">Confirmar Contraseña:</label>
+                <input type="password" id="confirm_password" name="confirm_password" autocomplete="new-password" required>
+                <span id="confirm-password-valid-icon" class="success-icon">&#10004;</span>
+                <span id="confirm-password-invalid-icon" class="error-icon">&#10060;</span>
+                <div id="password-match-error" class="error-message" style="display:none;">Las contraseñas no coinciden.</div>
+            </div>
+            <div>
+                <label for="admin_password">Contraseña de Admin (opcional):</label>
+                <input type="password" id="admin_password" name="admin_password" autocomplete="new-password">
+                <span id="admin-password-icon"></span> 
+            </div>
+            <button type="submit">Registrar</button>
+        </form>
+
+        <button id="toggle-form">¿No tienes una cuenta? Regístrate aquí</button>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/intlTelInput.min.js"></script>
+    <script src="/js/formLogic.js"></script>
+</body>
+</html>

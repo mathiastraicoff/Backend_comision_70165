@@ -1,0 +1,11 @@
+<h1>Finalizar Compra</h1>
+<p>Productos en tu carrito:</p>
+<ul>
+    {{#each cart.products}}
+    <li>{{this.product.title}} - {{this.quantity}} x ${{this.product.price}}</li>
+    {{/each}}
+</ul>
+<p>Total: ${{total}}</p>
+<form action="/api/carts/{{cart._id}}/purchase" method="POST">
+    <button type="submit">Confirmar Compra</button>
+</form>

@@ -1,0 +1,15 @@
+<h1>Compra Exitosa</h1>
+<p>Gracias por tu compra, {{user.name}}!</p>
+<p>Tu ticket de compra es el siguiente:</p>
+<table>
+    <tr>
+        <th>Código</th>
+        <th>Fecha de Compra</th>
+        <th>Total</th>
+    </tr>
+    <tr>
+        <td>{{ticket.code}}</td>
+        <td>{{ticket.purchase_datetime}}</td>
+        <td>${{ticket.amount}}</td>
+    </tr>
+</table>
