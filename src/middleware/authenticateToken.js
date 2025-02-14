@@ -1,23 +1,25 @@
-import jwt from 'jsonwebtoken';
+import jwt from "jsonwebtoken";
+import logger from "../utils/logger.js";
 
 const authenticateToken = (req, res, next) => {
-    // Obtener token desde cookies o headers
-    const token = req.cookies.token || req.headers.authorization?.split(' ')[1];
-    console.log("Token recibido en la solicitud:", token);
+    const token = req.cookies?.token || req.headers.authorization?.split(" ")[1];
+    logger.info(`Token recibido en la solicitud: ${token}`);
 
     if (!token) {
-        console.log("Token no encontrado");
-        return res.status(401).json({ message: "Token no encontrado. Acceso no autorizado." });
+        logger.error("Token no encontrado");
+        return res.status(401).json({
+            error: "Token no encontrado. Acceso no autorizado.",
+        });
     }
-
-    // Verificar el token
-    jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
+    jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
         if (err) {
-            console.log("Error al verificar el token:", err.message);
-            return res.status(403).json({ message: "Token inválido o expirado. Acceso no autorizado." });
+            logger.error(`Error al verificar el token: ${err.message}`);
+            return res.status(403).json({
+                error: "Token inválido o expirado. Acceso no autorizado.",
+            });
         }
-        console.log("Token válido, usuario:", user);
-        req.user = user;  
+        logger.info(`Token válido, datos del usuario: ${JSON.stringify(decoded)}`);
+        req.user = { id: decoded.id, email: decoded.email };
         next();
     });
 };

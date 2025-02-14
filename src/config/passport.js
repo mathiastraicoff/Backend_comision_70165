@@ -1,13 +1,13 @@
-
 import dotenv from "dotenv";
-import { Strategy as LocalStrategy } from 'passport-local';
-import { Strategy as JwtStrategy, ExtractJwt } from 'passport-jwt';
-import UserService from '../service/UserManager.js';
+import { Strategy as LocalStrategy } from "passport-local";
+import { Strategy as JwtStrategy, ExtractJwt } from "passport-jwt";
+import UserService from "../service/UserManager.js";
+import logger from "../utils/logger.js";
 
 dotenv.config();
 
 if (!process.env.JWT_SECRET) {
-    console.error("JWT_SECRET no está definido en el archivo .env");
+    logger.error("JWT_SECRET no está definido en el archivo .env");
     process.exit(1);
 }
 
@@ -16,19 +16,22 @@ export const configureLocalStrategy = (passport) => {
     passport.use(
         new LocalStrategy(
             {
-                usernameField: 'email',
-                passwordField: 'password',
+                usernameField: "email",
+                passwordField: "password",
             },
             async (email, password, done) => {
                 try {
                     const user = await UserService.getUserByEmail(email);
                     if (!user) {
-                        return done(null, false, { message: 'Usuario no encontrado' });
+                        return done(null, false, { message: "Usuario no encontrado" });
                     }
 
-                    const isValidPassword = await UserService.comparePassword(password, user.password);
+                    const isValidPassword = await UserService.comparePassword(
+                        password,
+                        user.password
+                    );
                     if (!isValidPassword) {
-                        return done(null, false, { message: 'Contraseña incorrecta' });
+                        return done(null, false, { message: "Contraseña incorrecta" });
                     }
 
                     return done(null, user);

@@ -15,6 +15,9 @@ class ProductMongo {
 
     async update(productId, updatedProduct) {
         try {
+            const exists = await this.productModel.exists({ _id: productId });
+            if (!exists) throw new Error('Product not found');
+
             return await this.productModel.findByIdAndUpdate(productId, updatedProduct, { new: true });
         } catch (error) {
             throw new Error(error.message);

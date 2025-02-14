@@ -1,0 +1,87 @@
+/auth/login:
+  post:
+    summary: Inicio de sesión (Auth Router)
+    description: Permite al usuario iniciar sesión utilizando autenticación local.
+    requestBody:
+      $ref: '#/components/requestBodies/LoginRequest'
+    responses:
+      '200':
+        $ref: '#/components/responses/LoginSuccess'
+      '401':
+        $ref: '#/components/responses/LoginUnauthorized'
+
+/api/sessions/register:
+  post:
+    summary: Registro de usuario (Session Router)
+    description: Permite registrar un nuevo usuario.
+    requestBody:
+      $ref: '#/components/requestBodies/RegisterRequest'
+    responses:
+      '302':
+        $ref: '#/components/responses/RegisterSuccess'
+      '400':
+        $ref: '#/components/responses/RegisterError'
+
+/api/sessions/login:
+  post:
+    summary: Inicio de sesión (Session Router)
+    description: Permite al usuario iniciar sesión con su email y contraseña.
+    requestBody:
+      $ref: '#/components/requestBodies/SessionLoginRequest'
+    responses:
+      '200':
+        $ref: '#/components/responses/LoginSuccess'
+      '401':
+        $ref: '#/components/responses/LoginUnauthorized'
+
+/api/users/profile:
+  get:
+    summary: Obtener el perfil del usuario actual
+    description: Retorna la información del usuario autenticado.
+    security:
+      - bearerAuth: []
+    responses:
+      '200':
+        $ref: '#/components/responses/UserProfileSuccess'
+      '404':
+        $ref: '#/components/responses/UserNotFound'
+      '500':
+        $ref: '#/components/responses/ServerError'
+  put:
+    summary: Actualizar el perfil del usuario
+    description: Permite actualizar los datos del usuario autenticado.
+    security:
+      - bearerAuth: []
+    requestBody:
+      $ref: '#/components/requestBodies/UpdateUserProfile'
+    responses:
+      '200':
+        $ref: '#/components/responses/UserProfileUpdated'
+      '400':
+        $ref: '#/components/responses/UpdateError'
+      '500':
+        $ref: '#/components/responses/ServerError'
+  delete:
+    summary: Eliminar el perfil del usuario
+    description: Elimina la cuenta del usuario autenticado y cierra la sesión.
+    security:
+      - bearerAuth: []
+    responses:
+      '200':
+        $ref: '#/components/responses/UserDeleted'
+      '404':
+        $ref: '#/components/responses/UserNotFound'
+      '500':
+        $ref: '#/components/responses/ServerError'
+
+/api/users/all:
+  get:
+    summary: Obtener todos los usuarios (endpoint de desarrollador)
+    description: Retorna la lista completa de usuarios. Este endpoint es para uso interno del desarrollador.
+    security:
+      - bearerAuth: []
+    responses:
+      '200':
+        $ref: '#/components/responses/AllUsers'
+      '500':
+        $ref: '#/components/responses/ServerError'

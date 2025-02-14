@@ -1,34 +1,9 @@
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <title>Home</title>
     <link rel="stylesheet" href="/css/style.css">
-</head>
-<body>
-    <div id="user-info"></div>
-    <h1>PSA Argentina</h1>
-    <div id="cart-container"></div>
-    <a href="/carts/{{cartId}}">Ir al carrito (<span id="cart-count">{{cartCount}}</span>)</a>
-
-    <div class="slider">
-        <div class="gallery">
-            {{#each products}}
-            <div class="card">
-                <h2>{{this.title}}</h2>
-                <img src="{{this.image}}" alt="{{this.title}}" style="max-width: 100%; height: auto;">
-                <p>Precio: ${{this.price}}</p>
-                <a href="/products/{{this._id}}" class="btn">Ver Detalle</a>
-            </div>
-            {{/each}}
-        </div>
-    </div>
-
-    <a href="/products" class="btn ver-todo">Ver Todo</a>
-
-    <script src="/js/home.js"></script>
-
     <style>
         .slider {
             display: flex;
@@ -61,5 +36,28 @@
             text-align: center;
         }
     </style>
+</head>
+<body>
+    <div id="user-info"></div>
+    <h1>PSA Argentina</h1>
+    <div id="cart-container"></div>
+    <a href="/carts/{{cartId}}">Ir al carrito (<span id="cart-count">{{cartCount}}</span>)</a>
+
+    <div class="slider">
+        <div class="gallery">
+            {{#each products}}
+            <div class="card">
+                <h2>{{this.title}}</h2>
+                <img src="{{this.image}}" alt="{{this.title}}" style="max-width: 100%; height: auto;">
+                <p>Precio: ${{this.price}}</p>
+                <a href="/products/{{this._id}}" class="btn">Ver Detalle</a>
+            </div>
+            {{/each}}
+        </div>
+    </div>
+
+    <a href="/products" class="btn ver-todo">Ver Todo</a>
+
+    <script type="module" src="/js/index.js"></script>
 </body>
 </html>

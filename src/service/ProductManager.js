@@ -1,9 +1,11 @@
 import ProductRepository from '../repositories/ProductRepository.js';
-import ProductModel from '../models/Product.js'; 
+import ProductModel from '../models/Product.js';
+import productController from '../controllers/product.controller.js';
 
 class ProductManager {
     constructor() {
         this.productRepo = new ProductRepository(ProductModel);
+        this.productController = productController;
     }
 
     async getProductById(productId) {
@@ -30,7 +32,7 @@ class ProductManager {
 
     async getRandomProducts(count = 5) {
         try {
-            const allProducts = await this.productRepo.getProducts(); 
+            const allProducts = await this.productRepo.getProducts();
             const shuffled = allProducts.sort(() => 0.5 - Math.random());
             return shuffled.slice(0, count);
         } catch (error) {
@@ -60,7 +62,26 @@ class ProductManager {
             throw new Error('Error al obtener todos los productos: ' + error.message);
         }
     }
+
+    async getProducts(req, res) {
+        return this.productController.getProducts(req, res);
+    }
+
+    async getProductByIdController(req, res) {
+        return this.productController.getProductById(req, res);
+    }
+
+    async createProduct(req, res) {
+        return this.productController.createProduct(req, res);
+    }
+
+    async updateProduct(req, res) {
+        return this.productController.updateProduct(req, res);
+    }
+
+    async addToCart(req, res) {
+        return this.productController.addToCart(req, res);
+    }
 }
 
 export default ProductManager;
-

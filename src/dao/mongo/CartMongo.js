@@ -5,7 +5,7 @@ class CartMongo {
 
     async getById(cartId) {
         try {
-            const cart = await this.cartModel.findById(cartId);
+            const cart = await this.cartModel.findById(cartId).populate('products.productId');
             if (!cart) throw new Error('Cart not found');
             return cart;
         } catch (error) {
@@ -17,7 +17,14 @@ class CartMongo {
         try {
             const cart = await this.cartModel.findById(cartId);
             if (!cart) throw new Error('Cart not found');
-            cart.products.push({ productId, quantity });
+
+            const existingProduct = cart.products.find(p => p.productId.toString() === productId);
+            if (existingProduct) {
+                existingProduct.quantity += quantity;
+            } else {
+                cart.products.push({ productId, quantity });
+            }
+
             return await cart.save();
         } catch (error) {
             throw new Error(error.message);
@@ -28,7 +35,9 @@ class CartMongo {
         try {
             const cart = await this.cartModel.findById(cartId);
             if (!cart) throw new Error('Cart not found');
-            cart.products = cart.products.filter(p => p.productId !== productId);
+
+            cart.products = cart.products.filter(p => p.productId.toString() !== productId);
+
             return await cart.save();
         } catch (error) {
             throw new Error(error.message);
@@ -46,6 +55,9 @@ class CartMongo {
 
     async update(cartId, updatedCart) {
         try {
+            const exists = await this.cartModel.exists({ _id: cartId });
+            if (!exists) throw new Error('Cart not found');
+            
             return await this.cartModel.findByIdAndUpdate(cartId, updatedCart, { new: true });
         } catch (error) {
             throw new Error(error.message);

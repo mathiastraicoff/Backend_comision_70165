@@ -1,34 +1,43 @@
 import CartRepository from '../repositories/CartRepository.js';
 import ProductRepository from '../repositories/ProductRepository.js';
 import TicketRepository from '../repositories/TicketRepository.js';
-import Cart from '../dao/mongo/models/carts.js'; 
+import Cart from '../dao/mongo/models/carts.js';
+import Product from '../models/Product.js'; 
 
 class CartManager {
     constructor() {
         this.cartRepo = new CartRepository(Cart);  
-        this.productRepo = new ProductRepository();
+        this.productRepo = new ProductRepository(Product);
         this.ticketRepo = new TicketRepository();
     }
 
-    async createCart() {
+    async createCart(userId) {
         try {
-            const cart = await this.cartRepo.create();  
+            const cart = await this.cartRepo.create({ userId, products: [] });
             return cart;
         } catch (error) {
-            throw new Error('Error creating cart: ' + error.message);  
+            throw new Error('Error creating cart: ' + error.message);
         }
     }
 
-    async addProductToCart(cartId, productId, quantity) {
+    async addProductToCart(userId, productId, quantity) {
         try {
-            const cart = await this.cartRepo.getById(cartId);
+            let cart = await this.cartRepo.getByUserId(userId);
+            if (!cart) {
+                cart = await this.createCart(userId);
+            }
             const product = await this.productRepo.getById(productId);
             
             if (!product) throw new Error('Product not found');
             if (product.stock < quantity) throw new Error('Not enough stock');
 
-            cart.products.push({ productId, quantity });
-            await this.cartRepo.update(cartId, cart);
+            const productInCart = cart.products.find(item => item.productId.equals(productId));
+            if (productInCart) {
+                productInCart.quantity += quantity;
+            } else {
+                cart.products.push({ productId, quantity });
+            }
+            await this.cartRepo.update(cart._id, cart);
             return cart;
         } catch (error) {
             throw new Error('Error adding product to cart: ' + error.message);
@@ -38,11 +47,11 @@ class CartManager {
     async removeProductFromCart(cartId, productId) {
         try {
             const cart = await this.cartRepo.getById(cartId);
-            cart.products = cart.products.filter(item => item.productId !== productId);
-            await this.cartRepo.update(cartId, cart);
+            cart.products = cart.products.filter(item => item.productId.toString() !== productId);
+            await this.cartRepo.update(cart._id, cart);
             return cart;
         } catch (error) {
-            throw new Error('Error removing product from cart');
+            throw new Error('Error removing product from cart: ' + error.message);
         }
     }
 
@@ -58,13 +67,12 @@ class CartManager {
                 if (product.stock >= item.quantity) {
                     totalAmount += product.price * item.quantity;
                     product.stock -= item.quantity;
-                    await this.productRepo.update(product.id, product);
+                    await this.productRepo.update(product);
                 } else {
                     unavailableProducts.push(item.productId);
                 }
             }
 
-            // Crear el ticket
             const ticket = await this.ticketRepo.create({
                 code: `TICKET-${Date.now()}`,
                 amount: totalAmount,
@@ -72,9 +80,8 @@ class CartManager {
                 purchase_datetime: new Date(),
             });
 
-            // Actualizar el carrito con los productos restantes (aquellos que no se pudieron comprar)
             cart.products = cart.products.filter(item => !unavailableProducts.includes(item.productId));
-            await this.cartRepo.update(cartId, cart);
+            await this.cartRepo.update(cart._id, cart);
 
             return { ticket, unavailableProducts };
         } catch (error) {
@@ -82,7 +89,6 @@ class CartManager {
         }
     }
 
-    // Nuevo método getCartCount para contar productos en el carrito
     async getCartCount(cartId) {
         try {
             const cart = await this.cartRepo.getById(cartId);

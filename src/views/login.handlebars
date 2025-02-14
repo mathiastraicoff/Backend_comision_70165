@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -44,24 +43,11 @@
             color: red;
             font-size: 14px;
         }
-        .success-icon, .error-icon {
-            display: none;
-            width: 20px;
-            height: 20px;
-        }
-        .success-icon {
-            color: green;
-        }
-        .error-icon {
-            color: red;
-        }
     </style>
 </head>
 <body>
     <div>
         <h1 id="form-title">Iniciar Sesión</h1>
-
-        <!-- Formulario de inicio de sesión -->
         <form id="login-form">
             <div>
                 <label for="email">Email:</label>
@@ -76,7 +62,6 @@
             <button type="submit">Iniciar Sesión</button>
         </form>
 
-        <!-- Formulario de registro -->
         <form id="register-form" style="display:none;">
             <div>
                 <label for="first_name">Nombre:</label>
@@ -102,20 +87,15 @@
             <div>
                 <label for="register_password">Contraseña:</label>
                 <input type="password" id="register_password" name="register_password" autocomplete="new-password" required>
-                <span id="password-valid-icon" class="success-icon">&#10004;</span>
-                <span id="password-invalid-icon" class="error-icon">&#10060;</span>
             </div>
             <div>
                 <label for="confirm_password">Confirmar Contraseña:</label>
                 <input type="password" id="confirm_password" name="confirm_password" autocomplete="new-password" required>
-                <span id="confirm-password-valid-icon" class="success-icon">&#10004;</span>
-                <span id="confirm-password-invalid-icon" class="error-icon">&#10060;</span>
                 <div id="password-match-error" class="error-message" style="display:none;">Las contraseñas no coinciden.</div>
             </div>
             <div>
                 <label for="admin_password">Contraseña de Admin (opcional):</label>
                 <input type="password" id="admin_password" name="admin_password" autocomplete="new-password">
-                <span id="admin-password-icon"></span> 
             </div>
             <button type="submit">Registrar</button>
         </form>

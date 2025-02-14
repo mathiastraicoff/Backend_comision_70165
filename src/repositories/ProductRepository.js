@@ -5,7 +5,7 @@ class ProductRepository {
 
     async getProducts() {
         try {
-            return await this.productModel.find(); // Recupera todos los productos
+            return await this.productModel.find(); 
         } catch (error) {
             throw new Error('Error al obtener los productos: ' + error.message);
         }

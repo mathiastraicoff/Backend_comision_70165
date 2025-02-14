@@ -1,0 +1,73 @@
+components:
+  requestBodies:
+    LoginRequest:
+      description: Credenciales para inicio de sesión.
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              email:
+                type: string
+                example: usuario@example.com
+              password:
+                type: string
+                example: password123
+
+    RegisterRequest:
+      description: Datos para registro de usuario.
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              first_name:
+                type: string
+              last_name:
+                type: string
+              register_email:
+                type: string
+              phone:
+                type: string
+              age:
+                type: integer
+              register_password:
+                type: string
+              confirm_password:
+                type: string
+              admin_password:
+                type: string
+
+    SessionLoginRequest:
+      description: Credenciales para inicio de sesión en Session Router.
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              email:
+                type: string
+              password:
+                type: string
+
+    UpdateUserProfile:
+      description: Datos para actualizar el perfil del usuario.
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              first_name:
+                type: string
+              last_name:
+                type: string
+              email:
+                type: string
+              phone:
+                type: string
+              age:
+                type: integer

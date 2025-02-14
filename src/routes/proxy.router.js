@@ -7,13 +7,9 @@ const proxyRouter = Router();
 proxyRouter.get('/ipinfo', async (req, res) => { 
     try {
         const token = process.env.IPINFO_TOKEN;
-
-        // Validar token
         if (!token) {
             return res.status(500).json({ error: 'Falta el token de ipinfo.io en el servidor.' });
         }
-
-        // Fetch con timeout de 5 segundos
         const fetchWithTimeout = (url, options, timeout = 5000) => {
             return Promise.race([
                 fetch(url, options),
@@ -35,7 +31,6 @@ proxyRouter.get('/ipinfo', async (req, res) => {
         res.json(data);
 
     } catch (error) {
-        // Manejo de error con mensaje claro
         console.error('Error al obtener información de IP:', error.message);
         res.status(500).json({
             error: 'Error interno del servidor',

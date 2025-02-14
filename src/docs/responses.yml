@@ -1,0 +1,102 @@
+components:
+  responses:
+    LoginSuccess:
+      description: Inicio de sesión exitoso.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+              redirectUrl:
+                type: string
+
+    LoginUnauthorized:
+      description: Credenciales inválidas.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+
+    RegisterSuccess:
+      description: Registro exitoso redirige a la página de inicio.
+
+    RegisterError:
+      description: Error en el registro (por ejemplo, contraseñas no coinciden o usuario ya existe).
+
+    UserProfileSuccess:
+      description: Perfil obtenido con éxito.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              _id:
+                type: string
+              first_name:
+                type: string
+              last_name:
+                type: string
+              email:
+                type: string
+              phone:
+                type: string
+              age:
+                type: integer
+              role:
+                type: string
+              pets:
+                type: array
+                items:
+                  type: string
+
+    UserProfileUpdated:
+      description: Perfil actualizado correctamente.
+      content:
+        application/json:
+          schema:
+            type: object
+
+    UpdateError:
+      description: Error en la actualización.
+
+    UserDeleted:
+      description: Usuario eliminado exitosamente y sesión cerrada.
+
+    UserNotFound:
+      description: Usuario no encontrado.
+
+    AllUsers:
+      description: Lista de usuarios.
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              type: object
+              properties:
+                _id:
+                  type: string
+                first_name:
+                  type: string
+                last_name:
+                  type: string
+                email:
+                  type: string
+                phone:
+                  type: string
+                age:
+                  type: integer
+                role:
+                  type: string
+                pets:
+                  type: array
+                  items:
+                    type: string
+
+    ServerError:
+      description: Error del servidor.

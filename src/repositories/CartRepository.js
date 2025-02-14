@@ -1,11 +1,11 @@
 class CartRepository {
     constructor(cartModel) {
-        this.cartModel = cartModel;  // Modelo de Cart pasado al repositorio
+        this.cartModel = cartModel;
     }
 
-    async create() {
+    async create(cartData) {
         try {
-            const newCart = new this.cartModel({ products: [] });  // Crear un carrito vacío
+            const newCart = new this.cartModel(cartData);
             await newCart.save();
             return newCart;
         } catch (error) {
@@ -20,6 +20,15 @@ class CartRepository {
             return cart;
         } catch (error) {
             throw new Error(error.message);
+        }
+    }
+
+    async getByUserId(userId) {
+        try {
+            const cart = await this.cartModel.findOne({ userId });
+            return cart;
+        } catch (error) {
+            throw new Error('Error finding cart by user ID: ' + error.message);
         }
     }
 
@@ -45,11 +54,11 @@ class CartRepository {
         }
     }
 
-    async update(cart) {
+    async update(cartId, cartData) {
         try {
-            return await cart.save();
+            return await this.cartModel.findByIdAndUpdate(cartId, cartData, { new: true });
         } catch (error) {
-            throw new Error(error.message);
+            throw new Error('Error updating cart: ' + error.message);
         }
     }
 }
